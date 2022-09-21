@@ -4,16 +4,12 @@ import {
     v4 as uuidv4
 } from 'uuid';
 uuidv4();
-const users = [];
+let users = [];
 
 router.get('/', (req, res) => {
     res.send(users);
 })
 
-router.get('/:id', (req, res) => {
-    console.log(req.params.id)
-    res.send('the get id route!')
-})
 
 router.post('/', (req, res) => {
     const user = req.body;
@@ -24,5 +20,25 @@ router.post('/', (req, res) => {
     res.send(`User with the name ${user.firstName} added to the database`)
 })
 
+
+router.get('/:id', (req, res) => {
+    const {
+        id
+    } = req.params;
+    const foundUser = users.find((user) => user.id === id);
+    if (foundUser) {
+        res.send(foundUser)
+        console.log(req.params.id, foundUser)
+    } else {
+        console.log("User not found");
+        res.send(`User with the id:${id} not found!`)
+    }
+})
+
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    users = users.filter((user) => user.id !== id);
+    res.send(`User with the id:${id} deleted from database`);
+})
 
 export default router;
